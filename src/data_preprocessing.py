@@ -41,7 +41,7 @@ def prepare_data(drum_path, kick_path, x_percent = 1.0, type = "center", noise_f
     def remove_numbers(filename):
         return re.sub(r'\d+', '', filename)
     X_labs = np.vectorize(remove_numbers)(X_labs)
-
+    
     # Create labels
     drum_labels = np.zeros(drum_samples.shape[0])
     kick_labels = np.ones(kick_samples.shape[0])
@@ -51,51 +51,13 @@ def prepare_data(drum_path, kick_path, x_percent = 1.0, type = "center", noise_f
 
     return X, y, X_labs
 
-def split_data(X, y, X_labs, X_train_labs = None, test_size = 0.25, random_state = 1, verbose = True):
-    """
-    Partition train and test data.
-
-    Parameters:
-    X (array): Array of sound files.
-    y (array): Array of true labels.
-    X_labs (array): Array of sound match sources.
-    X_train_labs (list): Optional list of matches over which to train model.
-    test_size (float): Proportion of observations to randomly assign to test set if X_train_labs is None.
-    random_state (int): Random seed for reproducability.
-    verbose (bool): Distribution of outcome variable printed if true.
-    
-    Returns:
-    tuple: Contains multiple elements:
-        - X_train
-        - y_train
-        - X_test
-        - y_test
-    """
-    
-    # Partition data randomly if X_train_labs is None
-    if X_train_labs is None:
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = test_size, random_state = random_state)
-    else:
-    # Partition data by X_train_labs
-        train_mask = np.isin(X_labs, X_train_labs)
-        test_mask = ~np.isin(X_labs, X_train_labs)
-        X_train = X[train_mask]
-        y_train = y[train_mask]
-        X_test = X[test_mask]
-        y_test = y[test_mask]
-        
-    # Print distributions (if required)
-    if verbose:
-        print(f"Training set distribution: {Counter(np.argmax(y_train, axis = 1))}")
-        print(f"Testing set distribution: {Counter(np.argmax(y_test, axis = 1))}")
-    return X_train, X_test, y_train, y_test
-
-def load_files(folder, x_percent, type, noise_factor):
+def load_files(folder = None, files = None, x_percent = 1.0, type = "center", noise_factor = 0.0):
     """
     Load sound files and apply augmentations.
 
     Parameters:
     folder (str): File path to audio samples.
+    files (list): Optional list of specific files to process.
     x_percent (float): Percentage of 0.4 second audio to train model.
     type (string): Section of sound audio to retain ("start", "center", "end", or "random")
     noise_factor (float): Articifical noise factor to add to raw audio.
@@ -105,13 +67,18 @@ def load_files(folder, x_percent, type, noise_factor):
         - Array of audio files (MEL spectrogram)
         - Array of source file names
     """
-    files = os.listdir(folder)
+    
+    # Identify files to process
+    if files is None:
+        files = os.listdir(folder)
+        files_long = [os.path.join(folder, file) for file in files]
+    
+    # Initialize result
     arrays = []
-    for file in files:
-        
+    for file in files_long:
+
         # Load raw audio
-        path = os.path.join(folder, file)
-        audio, sr = librosa.load(path, sr = None)
+        audio, sr = librosa.load(file, sr = None)
         
         # Perform augmentations
         augmented_audio = augment_wav(y = audio, x_percent = x_percent, type = type, noise_factor = noise_factor)
@@ -170,3 +137,42 @@ def add_noise(data, noise_factor):
     augmented_data = data + (noise_factor * noise)
     augmented_data = augmented_data.astype(type(data[0]))
     return augmented_data
+    
+def split_data(X, y, X_labs, X_train_labs = None, test_size = 0.25, random_state = 1, verbose = False):
+    """
+    Partition train and test data.
+
+    Parameters:
+    X (array): Array of sound files.
+    y (array): Array of true labels.
+    X_labs (array): Array of sound match sources.
+    X_train_labs (list): Optional list of matches over which to train model.
+    test_size (float): Proportion of observations to randomly assign to test set if X_train_labs is None.
+    random_state (int): Random seed for reproducability.
+    verbose (bool): Distribution of outcome variable printed if true.
+    
+    Returns:
+    tuple: Contains multiple elements:
+        - X_train
+        - y_train
+        - X_test
+        - y_test
+    """
+
+    # Partition data randomly if X_train_labs is None
+    if X_train_labs is None:
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = test_size, random_state = random_state)
+    else:
+    # Partition data by X_train_labs
+        train_mask = np.isin(X_labs, X_train_labs)
+        test_mask = ~np.isin(X_labs, X_train_labs)
+        X_train = X[train_mask]
+        y_train = y[train_mask]
+        X_test = X[test_mask]
+        y_test = y[test_mask]
+        
+    # Print distributions (if required)
+    if verbose:
+        print(f"Training set distribution: {Counter(np.argmax(y_train, axis = 1))}")
+        print(f"Testing set distribution: {Counter(np.argmax(y_test, axis = 1))}")
+    return X_train, X_test, y_train, y_test
