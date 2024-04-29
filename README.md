@@ -30,7 +30,7 @@ train_classifier(model_name = "base")
 Or using specific matches in the train set and specific matches in the test set:
 
 ```bash
-train_classifier(model_name = "base", X_train_labs = ['Drum_.wav', 'SFC_CFC_Kick_.wav'])
+train_classifier(model_name = "base", X_train_labs = ['XXX.wav', 'XXX.wav'])
 ```
 
 Models are saved by default, but this behavior can be turned off using `model_save = False`.
