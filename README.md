@@ -13,22 +13,40 @@ cd Kick_Drum_Classsifier
 
 ## Usage
 
+### Model Training
+
 Train the classifier using the following Jupyter notebook:
 
 ```bash
-jupyter notebook kick_drum_classifier.ipynb
+jupyter notebook train_classifiers.ipynb
 ```
 
 Training and testing can be performed using random partitions:
 
 ```bash
-train_classifier()
+train_classifier(model_name = "base")
 ```
 
 Or using specific matches in the train set and specific matches in the test set:
 
 ```bash
-train_classifier(X_train_labs = ['Drum_.wav', 'SFC_CFC_Kick_.wav'])
+train_classifier(model_name = "base", X_train_labs = ['Drum_.wav', 'SFC_CFC_Kick_.wav'])
+```
+
+Models are saved by default, but this behavior can be turned off using `model_save = False`.
+
+### Model Inference
+
+Run inference using the following Jupyter notebook:
+
+```bash
+jupyter notebook call_classifers.ipynb
+```
+
+Inference is called using:
+
+```bash
+predict_sounds(files = ['XXX.wav', 'XXX.wav'], model = '../models/base.keras')
 ```
 
 ## Input Data Structure
