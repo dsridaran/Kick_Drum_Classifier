@@ -21,6 +21,7 @@ def train_classifier(model_name = "none", model_save = True, overwrite = False, 
 
     Parameters:
     model_name (str): Name of model.
+    model_save (bool): Saves model if True.
     overwrite (bool): Overwrites existing model if True.
     drum_path (str): File path to drum audio samples.
     kick_path (str): File path to kick audio samples.
