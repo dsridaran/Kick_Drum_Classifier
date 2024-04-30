@@ -1,6 +1,6 @@
 # Kick_Drum_Classifier
 
-![Image Alt text](/logo.jpg
+![Image Alt text](/logo.png
 
 ## Description
 This project provides a deep learning system for classifying audio clips as "player kicks" or "fan drums." The goal is to accurately isolate the two events to improve sound localization techniques for tracking and broadcasting.
