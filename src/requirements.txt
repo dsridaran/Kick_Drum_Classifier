@@ -1,10 +1,3 @@
-tensorflow
-librosa
-scikit-learn
-soundfile
-collections
-cv2
-random
 streamlit
 pandas
 numpy
