@@ -1,1 +1,9 @@
 tensorflow
+os
+re
+librosa
+sklearn
+soundfile
+collections
+cv2
+random
