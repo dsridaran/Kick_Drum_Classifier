@@ -5,3 +5,6 @@ soundfile
 collections
 cv2
 random
+streamlit
+pandas
+numpy
