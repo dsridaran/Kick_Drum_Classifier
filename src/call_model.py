@@ -5,18 +5,18 @@ import os
 def load_files(files = None):
 
     # Identify files to process
-    files = os.listdir(folder)
-    files_long = [os.path.join(folder, file) for file in files]
+    #files = os.listdir(folder)
+    #files_long = [os.path.join(folder, file) for file in files]
     
     # Initialize result
     arrays = []
-    for file in files_long:
+    #for file in files_long:
 
-        # Load raw audio
-        audio, sr = librosa.load(file, sr = None)
-        mel_spec = librosa.feature.melspectrogram(y = audio, sr = sr)
-        mel_spec_db = librosa.power_to_db(mel_spec, ref = np.max)
-        arrays.append(mel_spec_db)
+    # Load raw audio
+    audio, sr = librosa.load(files, sr = None)
+    mel_spec = librosa.feature.melspectrogram(y = audio, sr = sr)
+    mel_spec_db = librosa.power_to_db(mel_spec, ref = np.max)
+    arrays.append(mel_spec_db)
     return np.array(arrays), files
 
 def predict_sounds(files, model = '../models/base.keras'):
