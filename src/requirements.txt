@@ -1,6 +1,6 @@
 tensorflow
 librosa
-sklearn
+scikit-learn
 soundfile
 collections
 cv2
