@@ -37,7 +37,7 @@ def predict_sounds(files, model = '../models/base.keras'):
     samples = samples.reshape((*samples.shape, 1))
 
     # Load model and generate predictions
-    model = load_model(model)
+    model = load_model(model, compile = False)
     predictions = model.predict(samples, verbose = 0)
 
     # Store predictions
