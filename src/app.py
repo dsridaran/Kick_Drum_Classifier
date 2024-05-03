@@ -6,10 +6,14 @@ st.set_page_config(page_title = 'Audio Classifier', layout = 'wide')
 
 def save_uploaded_file(uploaded_file):
     try:
-        with open(os.path.join('uploads', uploaded_file.name), "wb") as f:
+        upload_dir = 'uploads'
+        os.makedirs(upload_dir, exist_ok=True)
+        file_path = os.path.join(upload_dir, uploaded_file.name)
+        with open(file_path, "wb") as f:
             f.write(uploaded_file.getbuffer())
         return True
     except Exception as e:
+        print(e)
         return False
 
 st.title('Audio Classification App')
