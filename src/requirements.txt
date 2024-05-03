@@ -1,5 +1,4 @@
 tensorflow
-re
 librosa
 sklearn
 soundfile
