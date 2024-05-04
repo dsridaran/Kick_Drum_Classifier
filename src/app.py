@@ -2,8 +2,10 @@ import streamlit as st
 import os
 from call_model import predict_sounds, load_files
 
-st.set_page_config(page_title = 'Kick and Drum Classifier', layout = 'wide')
+# Set the page configuration and layout
+st.set_page_config(page_title='Kick and Drum Classifier', layout='wide')
 
+# Function to save uploaded file
 def save_uploaded_file(uploaded_file):
     try:
         upload_dir = 'uploads'
@@ -11,35 +13,43 @@ def save_uploaded_file(uploaded_file):
         file_path = os.path.join(upload_dir, uploaded_file.name)
         with open(file_path, "wb") as f:
             f.write(uploaded_file.getbuffer())
-        return True
+        return file_path  # Return the path of the saved file
     except Exception as e:
         print(e)
-        return False
+        return None
 
+# Sidebar for uploading files
 with st.sidebar:
-    st.title('Kick & Drum Classifier')
-    uploaded_file = st.file_uploader("Upload an audio file", type=['wav'])
+    st.title('Upload Audio')
+    uploaded_file = st.file_uploader("Choose a WAV file", type=['wav'])
     if uploaded_file is not None:
-        if save_uploaded_file(uploaded_file):
-            st.success("File uploaded successfully: {}".format(uploaded_file.name))
-            file_path = os.path.join('uploads', uploaded_file.name)
+        file_path = save_uploaded_file(uploaded_file)
+        if file_path:
+            st.success(f"File uploaded successfully: {uploaded_file.name}")
             prediction = predict_sounds(file_path, 'models/base.h5')
         else:
             st.error("Failed to save file.")
+            prediction = None
 
-if uploaded_file is not None and prediction:
+# Main page content
+if uploaded_file and prediction:
+    st.header("Audio and Prediction Results")
+    # Display the audio file
     if file_path:
-        st.markdown(f"<h2>Raw Audio</h2>", unsafe_allow_html = True)
-        st.audio(file_path, loop = True) 
+        st.subheader("Raw Audio")
+        st.audio(file_path, format='audio/wav', start_time=0)
+
+    # Display the model prediction results
     if prediction:
+        st.subheader("Model Prediction")
         for result in prediction:
-            st.markdown(f"<h2>Model Prediction</h2>", unsafe_allow_html = True)
-            st.markdown(f"<h4>Predicted Class: {result['predicted_class']}</h4>", unsafe_allow_html = True)
-            st.markdown(f"<h4>Confidence: {result['confidence']:.2%}</h4>", unsafe_allow_html = True)
+            st.markdown(f"**Predicted Class:** {result['predicted_class']}")
+            st.markdown(f"**Confidence:** {result['confidence']:.2%}")
+
+            # Conditional image display based on the prediction
+            if result['predicted_class'] == "Kick":
+                st.image('images/kick.png', caption='Kick Drum')
+            elif result['predicted_class'] == "Drum":
+                st.image('images/drum.png', caption='Drum')
     else:
         st.error("Failed to make predictions.")
-    for result in prediction:
-        if result['predicted_class'] == "Kick":
-            st.image('images/kick.png')
-        elif result['predicted_class'] == "Drum":
-            st.image('images/drum.png')
