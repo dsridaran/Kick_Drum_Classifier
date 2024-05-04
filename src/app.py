@@ -34,9 +34,8 @@ if uploaded_file is not None and prediction:
             st.markdown(f"<h2>Confidence: {result['confidence']:.2%}</h2>", unsafe_allow_html = True)
     else:
         st.error("Failed to make predictions.")
-
     for result in prediction:
         if result['predicted_class'] == "Kick":
-            st.markdown("<div style = 'text-align: center'><img src = 'images/kick.png'></div>", unsafe_allow_html = True)
+            st.image('images/kick.png')
         elif result['predicted_class'] == "Drum":
-            st.markdown("<div style = 'text-align: center'><img src = 'images/drum.png'></div>", unsafe_allow_html = True)
+            st.image('images/drum.png')
