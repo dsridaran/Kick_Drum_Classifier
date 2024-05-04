@@ -43,7 +43,7 @@ def predict_sounds(files, model = 'models/base.keras'):
         
      # Load model and generate predictions
     #model = load_model(model, compile = False)
-    model = tf.keras.models.load_model('models/base.keras')
+    model = tf.keras.models.load_model('models/test.h5')
     predictions = model.predict(samples, verbose = 0)
 
     # Store predictions
