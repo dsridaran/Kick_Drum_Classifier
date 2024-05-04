@@ -5,6 +5,8 @@
 ## Description
 This project provides a deep learning system for classifying audio clips as "player kicks" or "fan drums." The goal is to accurately isolate the two events to improve sound localization techniques for tracking and broadcasting.
 
+[Try app!](https://kickdrumclassifier.streamlit.app/)
+
 ## Installation
 To set up this project, clone the repository to your local machine and ensure that you have Jupyter Notebook installed to run `.ipynb` files.
 
