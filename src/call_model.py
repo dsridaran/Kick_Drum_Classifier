@@ -42,4 +42,4 @@ def load_files(file = None):
     mel_spec = librosa.feature.melspectrogram(y = audio, sr = sr)
     mel_spec_db = librosa.power_to_db(mel_spec, ref = np.max)
     arrays.append(mel_spec_db)
-    return np.array(arrays), files
+    return np.array(arrays), file
