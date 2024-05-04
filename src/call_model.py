@@ -21,7 +21,8 @@ def load_files(files = None):
     arrays.append(mel_spec_db)
     return np.array(arrays), files
 
-def predict_sounds(files, model = '../models/base.keras'):
+def predict_sounds(files, model = 'base.keras'):
+#def predict_sounds(files, model = '../models/base.keras'):
     """
     Run inference on sounds using pre-trained model
 
