@@ -21,7 +21,7 @@ def load_files(files = None):
     arrays.append(mel_spec_db)
     return np.array(arrays), files
 
-def predict_sounds(files, model = 'base.keras'):
+def predict_sounds(files, model = 'models/base.keras'):
 #def predict_sounds(files, model = '../models/base.keras'):
     """
     Run inference on sounds using pre-trained model
@@ -43,18 +43,15 @@ def predict_sounds(files, model = 'base.keras'):
         
      # Load model and generate predictions
     #model = load_model(model, compile = False)
-    #model = tf.keras.models.load_model(model, compile = False)
-    #predictions = model.predict(samples, verbose = 0)
+    model = tf.keras.models.load_model('models/base.keras', compile = False)
+    predictions = model.predict(samples, verbose = 0)
 
     # Store predictions
     result = []
-    result.append({"file": directory_contents, "predicted_class": "Kick", "confidence": directory_contents})
-    return result
-
-    # for i, prediction in enumerate(predictions):
-    #     if prediction[0] > prediction[1]:
-    #         result.append({"file": names[i], "predicted_class": "Drum", "confidence": prediction[0]})
-    #     else:
-    #         result.append({"file": names[i], "predicted_class": "Kick", "confidence": prediction[1]})
+    for i, prediction in enumerate(predictions):
+        if prediction[0] > prediction[1]:
+            result.append({"file": names[i], "predicted_class": "Drum", "confidence": prediction[0]})
+        else:
+            result.append({"file": names[i], "predicted_class": "Kick", "confidence": prediction[1]})
     
-    # return result
+    return result
