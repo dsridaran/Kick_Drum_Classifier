@@ -28,10 +28,14 @@ with st.sidebar:
             st.error("Failed to save file.")
 
 if uploaded_file is not None and prediction:
+    if file_path:
+        st.markdown(f"<h2>Raw Audio</h2>", unsafe_allow_html = True)
+        st.audio(file_path, loop = True) 
     if prediction:
         for result in prediction:
-            st.markdown(f"<h2>Predicted Class: {result['predicted_class']}</h2>", unsafe_allow_html = True)
-            st.markdown(f"<h2>Confidence: {result['confidence']:.2%}</h2>", unsafe_allow_html = True)
+            st.markdown(f"<h2>Model Prediction</h2>", unsafe_allow_html = True)
+            st.markdown(f"<h3>Predicted Class: {result['predicted_class']}</h2>", unsafe_allow_html = True)
+            st.markdown(f"<h3>Confidence: {result['confidence']:.2%}</h2>", unsafe_allow_html = True)
     else:
         st.error("Failed to make predictions.")
     for result in prediction:
@@ -39,5 +43,3 @@ if uploaded_file is not None and prediction:
             st.image('images/kick.png')
         elif result['predicted_class'] == "Drum":
             st.image('images/drum.png')
-    if file_path:
-        st.audio(file_path, loop = True) 
