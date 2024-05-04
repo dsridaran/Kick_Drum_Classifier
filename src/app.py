@@ -17,15 +17,13 @@ def save_uploaded_file(uploaded_file):
         return False
 
 st.title('Audio Classification App')
-
 uploaded_file = st.file_uploader("Upload an audio file", type = ['wav'])
 
 if uploaded_file is not None:
     if save_uploaded_file(uploaded_file):
         st.success("File uploaded successfully: {}".format(uploaded_file.name))
         file_path = os.path.join('uploads', uploaded_file.name)
-        prediction = predict_sounds(file_path, 'base.keras')
-        #prediction = predict_sounds(file_path, '../models/base.keras')
+        prediction = predict_sounds(file_path, 'models/base.h5')
         if prediction:
             for result in prediction:
                 st.write(f"File: {result['file']}")
