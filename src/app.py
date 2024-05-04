@@ -37,9 +37,11 @@ with st.sidebar:
 if uploaded_file is not None and prediction:
     for result in prediction:
         if result['predicted_class'] == "Kick":
-            st.image('../images/kick.png')
+            st.markdown(f"<h2>os.listdir('.')</h2>", unsafe_allow_html = True)
+            #st.image('../images/kick.png')
         elif result['predicted_class'] == "Drum":
-            st.image('../ímages/drum.png')
+            st.markdown(f"<h2>os.listdir('.')</h2>", unsafe_allow_html = True)
+            #st.image('../ímages/drum.png')
 
 # import streamlit as st
 # import os
