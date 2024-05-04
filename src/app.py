@@ -37,6 +37,6 @@ if uploaded_file is not None and prediction:
 
     for result in prediction:
         if result['predicted_class'] == "Kick":
-            st.markdown("<div style='text-align: center'><img src='images/kick.png'></div>", unsafe_allow_html = True)
+            st.markdown("<div style = 'text-align: center'><img src = 'images/kick.png'></div>", unsafe_allow_html = True)
         elif result['predicted_class'] == "Drum":
-            st.markdown("<div style='text-align: center'><img src='images/drum.png'></div>", unsafe_allow_html = True)
+            st.markdown("<div style = 'text-align: center'><img src = 'images/drum.png'></div>", unsafe_allow_html = True)
