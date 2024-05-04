@@ -26,8 +26,8 @@ if uploaded_file is not None:
         prediction = predict_sounds(file_path, 'models/base.h5')
         if prediction:
             for result in prediction:
-                st.write(f"Predicted Class: {result['predicted_class']}")
-                st.write(f"Confidence: {result['confidence']:.2%}")
+                st.markdown(f"<h2>Predicted Class: {result['predicted_class']}</h2>", unsafe_allow_html = True)
+                st.markdown(f"<h2>Confidence: {result['confidence']:.2%}</h2>", unsafe_allow_html = True)
         else:
             st.error("Failed to make predictions.")
     else:
