@@ -36,17 +36,18 @@ if uploaded_file and prediction:
 
     if prediction:
         st.subheader("Model Prediction")
-        for result in prediction:
-            st.markdown(f"**Predicted Class:** {result['predicted_class']}")
-            st.markdown(f"**Confidence:** {result['confidence']:.2%}")
-            
+        for result in prediction:          
             if result['predicted_class'] == "Kick":
                 col1, col2, col3 = st.columns([1, 2, 1])
                 with col2:
                     st.image('images/kick.png', width = 500)
+                    st.markdown(f"**Predicted Class:** {result['predicted_class']}")
+                    st.markdown(f"**Confidence:** {result['confidence']:.2%}")
             elif result['predicted_class'] == "Drum":
                 col1, col2, col3 = st.columns([1, 2, 1])
                 with col2:
                     st.image('images/drum.png', width = 500)
+                    st.markdown(f"**Predicted Class:** {result['predicted_class']}")
+                    st.markdown(f"**Confidence:** {result['confidence']:.2%}")
     else:
         st.error("Failed to make predictions.")
