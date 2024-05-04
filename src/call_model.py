@@ -16,7 +16,7 @@ def predict_sounds(files, model = 'models/base.h5'):
     """
 
     # Pre-process audio files
-    samples, names = load_files(files = files)
+    samples, names = load_files(file = files)
     samples = samples.reshape((*samples.shape, 1))
 
     current_directory = os.getcwd()
