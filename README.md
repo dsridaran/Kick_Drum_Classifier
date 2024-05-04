@@ -57,8 +57,8 @@ predict_sounds(files = ['XXX.wav', 'XXX.wav'], model = '../models/base.h5')
 
 The expected inputs for each match are organized as follows:
 
-- **data/raw/{drum_folder}/{file}.wav:** 0.4 second 48kHz audio data for drums.
-- **data/raw/{kick_folder}/{file}.wav:** 0.4 second 48kHz audio data for kicks.
+- **data/raw/drum/{file}.wav:** 0.4 second 48kHz audio data for drums.
+- **data/raw/kick/{file}.wav:** 0.4 second 48kHz audio data for kicks.
 
 ## Contact
 
