@@ -1,4 +1,5 @@
-from tensorflow.keras.models import load_model
+#from tensorflow.keras.models import load_model
+import tensorflow as tf
 import librosa
 import os
 import numpy as np
@@ -37,7 +38,8 @@ def predict_sounds(files, model = '../models/base.keras'):
     samples = samples.reshape((*samples.shape, 1))
 
     # Load model and generate predictions
-    model = load_model(model, compile = False)
+    #model = load_model(model, compile = False)
+    model = tf.keras.models.load_model(model, compile = False)
     predictions = model.predict(samples, verbose = 0)
 
     # Store predictions
