@@ -16,7 +16,7 @@ def save_uploaded_file(uploaded_file):
         print(e)
         return False
 
-st.title('Audio Classification App')
+st.title('Kick & Drum Classifier')
 uploaded_file = st.file_uploader("Upload an audio file", type = ['wav'])
 
 if uploaded_file is not None:
@@ -32,5 +32,3 @@ if uploaded_file is not None:
             st.error("Failed to make predictions.")
     else:
         st.error("Failed to save file.")
-
-st.write("Please upload an audio file to get started.")
