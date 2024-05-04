@@ -24,17 +24,17 @@ with st.sidebar:
             st.success("File uploaded successfully: {}".format(uploaded_file.name))
             file_path = os.path.join('uploads', uploaded_file.name)
             prediction = predict_sounds(file_path, 'models/base.h5')
-            if prediction:
-                for result in prediction:
-                    st.markdown(f"<h2>Predicted Class: {result['predicted_class']}</h2>", unsafe_allow_html = True)
-                    st.markdown(f"<h2>Confidence: {result['confidence']:.2%}</h2>", unsafe_allow_html = True)
-            else:
-                st.error("Failed to make predictions.")
         else:
             st.error("Failed to save file.")
 
 # Main page for displaying images
 if uploaded_file is not None and prediction:
+    if prediction:
+        for result in prediction:
+            st.markdown(f"<h2>Predicted Class: {result['predicted_class']}</h2>", unsafe_allow_html = True)
+            st.markdown(f"<h2>Confidence: {result['confidence']:.2%}</h2>", unsafe_allow_html = True)
+    else:
+        st.error("Failed to make predictions.")
     for result in prediction:
         if result['predicted_class'] == "Kick":
             st.image('images/kick.png')
