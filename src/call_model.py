@@ -38,9 +38,8 @@ def predict_sounds(files, model = 'models/base.h5'):
 
 def load_files(file = None):
     arrays = []
-    for f in file:
-        audio, sr = librosa.load(f, sr = None)
-        mel_spec = librosa.feature.melspectrogram(y = audio, sr = sr)
-        mel_spec_db = librosa.power_to_db(mel_spec, ref = np.max)
-        arrays.append(mel_spec_db)
+    audio, sr = librosa.load(file, sr = None)
+    mel_spec = librosa.feature.melspectrogram(y = audio, sr = sr)
+    mel_spec_db = librosa.power_to_db(mel_spec, ref = np.max)
+    arrays.append(mel_spec_db)
     return np.array(arrays), file
