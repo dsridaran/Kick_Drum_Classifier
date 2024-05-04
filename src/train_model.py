@@ -15,7 +15,7 @@ import cv2
 import random
 from data_preprocessing import prepare_data, split_data
 
-def train_classifier(model_name = "none", model_save = True, overwrite = False, drum_path = '../data/raw/drum_samples_from_NN_training_set', kick_path = '../data/raw/kick_samples_from_NN_training_set', X_train_labs = None, x_percent = 1.0, type = "center", noise_factor = 0.0, verbose = False, epochs = 3, batch_size = 32, validation_split = 0.2, seed = 1, plot_cm = False):
+def train_classifier(model_name = "none", model_save = True, overwrite = False, drum_path = '../data/raw/drum', kick_path = '../data/raw/kick', X_train_labs = None, x_percent = 1.0, type = "center", noise_factor = 0.0, verbose = False, epochs = 3, batch_size = 32, validation_split = 0.2, seed = 1, plot_cm = False):
     """
     Train binary classification model.
 
@@ -40,9 +40,10 @@ def train_classifier(model_name = "none", model_save = True, overwrite = False, 
     model: Trained model.
     """    
     # Abort if model already exists
-    file_path = f'../models/{model_name}.keras'
+    file_path = f'../models/{model_name}.h5'
     if os.path.exists(file_path) and model_save and not overwrite:
-         return "Model already exists. Please provide a new model name or set: overwrite = True."
+         print("Model already exists. Please provide a new model name or set: overwrite = True.")
+         return 0, 0
         
     # Extract train and test data
     X, y, X_labs = prepare_data(drum_path, kick_path, x_percent, type, noise_factor, verbose)
