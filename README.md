@@ -1,4 +1,4 @@
-![Logo](logo.png "Logo")
+![Logo](images/logo.png "Logo")
 
 # Kick & Drum Classifier
 
