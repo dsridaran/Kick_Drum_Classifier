@@ -34,8 +34,8 @@ if uploaded_file is not None and prediction:
     if prediction:
         for result in prediction:
             st.markdown(f"<h2>Model Prediction</h2>", unsafe_allow_html = True)
-            st.markdown(f"<h3>Predicted Class: {result['predicted_class']}</h2>", unsafe_allow_html = True)
-            st.markdown(f"<h3>Confidence: {result['confidence']:.2%}</h2>", unsafe_allow_html = True)
+            st.markdown(f"<h4>Predicted Class: {result['predicted_class']}</h4>", unsafe_allow_html = True)
+            st.markdown(f"<h4>Confidence: {result['confidence']:.2%}</h4>", unsafe_allow_html = True)
     else:
         st.error("Failed to make predictions.")
     for result in prediction:
