@@ -38,18 +38,23 @@ def predict_sounds(files, model = 'base.keras'):
     samples, names = load_files(files = files)
     samples = samples.reshape((*samples.shape, 1))
 
-    # Load model and generate predictions
+    current_directory = os.getcwd()
+    directory_contents = os.listdir(current_directory)
+        
+     # Load model and generate predictions
     #model = load_model(model, compile = False)
-    model = tf.keras.models.load_model(model, compile = False)
-    predictions = model.predict(samples, verbose = 0)
+    #model = tf.keras.models.load_model(model, compile = False)
+    #predictions = model.predict(samples, verbose = 0)
 
     # Store predictions
     result = []
-
-    for i, prediction in enumerate(predictions):
-        if prediction[0] > prediction[1]:
-            result.append({"file": names[i], "predicted_class": "Drum", "confidence": prediction[0]})
-        else:
-            result.append({"file": names[i], "predicted_class": "Kick", "confidence": prediction[1]})
-    
+    result.append({"file": directory_contents, "predicted_class": "Kick", "confidence": directory_contents})
     return result
+
+    # for i, prediction in enumerate(predictions):
+    #     if prediction[0] > prediction[1]:
+    #         result.append({"file": names[i], "predicted_class": "Drum", "confidence": prediction[0]})
+    #     else:
+    #         result.append({"file": names[i], "predicted_class": "Kick", "confidence": prediction[1]})
+    
+    # return result
