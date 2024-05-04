@@ -43,10 +43,10 @@ if uploaded_file and prediction:
             if result['predicted_class'] == "Kick":
                 col1, col2, col3 = st.columns([1, 2, 1])
                 with col2:
-                    st.image('images/kick.png', width = 200)
+                    st.image('images/kick.png', width = 500)
             elif result['predicted_class'] == "Drum":
                 col1, col2, col3 = st.columns([1, 2, 1])
                 with col2:
-                    st.image('images/drum.png', width = 200)
+                    st.image('images/drum.png', width = 500)
     else:
         st.error("Failed to make predictions.")
