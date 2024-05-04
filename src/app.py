@@ -7,7 +7,7 @@ st.set_page_config(page_title = 'Audio Classifier', layout = 'wide')
 def save_uploaded_file(uploaded_file):
     try:
         upload_dir = 'uploads'
-        os.makedirs(upload_dir, exist_ok=True)
+        os.makedirs(upload_dir, exist_ok = True)
         file_path = os.path.join(upload_dir, uploaded_file.name)
         with open(file_path, "wb") as f:
             f.write(uploaded_file.getbuffer())
@@ -24,7 +24,8 @@ if uploaded_file is not None:
     if save_uploaded_file(uploaded_file):
         st.success("File uploaded successfully: {}".format(uploaded_file.name))
         file_path = os.path.join('uploads', uploaded_file.name)
-        prediction = predict_sounds(file_path, '../models/base.keras')
+        prediction = predict_sounds(file_path, 'base.keras')
+        #prediction = predict_sounds(file_path, '../models/base.keras')
         if prediction:
             for result in prediction:
                 st.write(f"File: {result['file']}")
