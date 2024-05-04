@@ -1,28 +1,9 @@
-#from tensorflow.keras.models import load_model
 import tensorflow as tf
 import librosa
 import os
 import numpy as np
 
-def load_files(files = None):
-
-    # Identify files to process
-    #files = os.listdir(folder)
-    #files_long = [os.path.join(folder, file) for file in files]
-    
-    # Initialize result
-    arrays = []
-    #for file in files_long:
-
-    # Load raw audio
-    audio, sr = librosa.load(files, sr = None)
-    mel_spec = librosa.feature.melspectrogram(y = audio, sr = sr)
-    mel_spec_db = librosa.power_to_db(mel_spec, ref = np.max)
-    arrays.append(mel_spec_db)
-    return np.array(arrays), files
-
-def predict_sounds(files, model = 'models/base.keras'):
-#def predict_sounds(files, model = '../models/base.keras'):
+def predict_sounds(files, model = 'models/base.h5'):
     """
     Run inference on sounds using pre-trained model
 
@@ -42,8 +23,7 @@ def predict_sounds(files, model = 'models/base.keras'):
     directory_contents = os.listdir(current_directory)
         
      # Load model and generate predictions
-    #model = load_model(model, compile = False)
-    model = tf.keras.models.load_model('models/test.h5')
+    model = tf.keras.models.load_model(model)
     predictions = model.predict(samples, verbose = 0)
 
     # Store predictions
@@ -55,3 +35,11 @@ def predict_sounds(files, model = 'models/base.keras'):
             result.append({"file": names[i], "predicted_class": "Kick", "confidence": prediction[1]})
     
     return result
+
+def load_files(file = None):
+    arrays = []
+    audio, sr = librosa.load(file, sr = None)
+    mel_spec = librosa.feature.melspectrogram(y = audio, sr = sr)
+    mel_spec_db = librosa.power_to_db(mel_spec, ref = np.max)
+    arrays.append(mel_spec_db)
+    return np.array(arrays), files
