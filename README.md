@@ -50,7 +50,7 @@ jupyter notebook call_classifers.ipynb
 Inference is called using:
 
 ```bash
-predict_sounds(files = ['XXX.wav', 'XXX.wav'], model = '../models/base.keras')
+predict_sounds(files = ['XXX.wav', 'XXX.wav'], model = '../models/base.h5')
 ```
 
 ## Input Data Structure
