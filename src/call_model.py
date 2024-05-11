@@ -4,26 +4,25 @@ import os
 import numpy as np
 from data_preprocessing import augment_wav
 
-def predict_sounds(files, model = 'models/base.h5'):
+def predict_sounds(files, model = 'models/base.h5', x_percent = 1.0, type = "center"):
     """
     Run inference on sounds using pre-trained model
 
     Parameters:
     files (list): List of audio files on which to run inference.
     model (str): Filepath to pre-trained model.
+    x_percent (float): Percentage of 0.4 second audio to train model.
+    type (string): Section of sound audio to retain ("start", "center", or "end").
     
     Returns:
     list: List with files, predicted classes, and confidence.
     """
     
     # Pre-process audio files
-    samples, names = load_files(file = files)
+    samples, names = load_files(file = files, x_percent = x_percent, type = type)
     samples = samples.reshape((*samples.shape, 1))
-
-    current_directory = os.getcwd()
-    directory_contents = os.listdir(current_directory)
         
-     # Load model and generate predictions
+    # Load model and generate predictions
     model = tf.keras.models.load_model(model)
     predictions = model.predict(samples, verbose = 0)
 
