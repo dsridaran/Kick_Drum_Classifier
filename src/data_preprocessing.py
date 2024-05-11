@@ -58,7 +58,7 @@ def load_files(folder = None, files = None, x_percent = 1.0, type = "center"):
     folder (str): File path to audio samples.
     files (list): Optional list of specific files to process.
     x_percent (float): Percentage of 0.4 second audio to train model.
-    type (string): Section of sound audio to retain ("start", "center", "end", or "random").
+    type (string): Section of sound audio to retain ("start", "center", or "end").
     
     Returns:
     tuple: Contains multiple elements:
