@@ -25,7 +25,7 @@ Train the classifier using the following Jupyter notebook:
 jupyter notebook train_classifiers.ipynb
 ```
 
-Training and testing can be performed using random partitions:
+Training and testing can be performed using random partitions (by default):
 
 ```bash
 train_classifier(model_name = "base")
@@ -53,7 +53,7 @@ Run inference using the following Jupyter notebook:
 jupyter notebook call_classifers.ipynb
 ```
 
-Inference is called using:
+Inference for files `['XXX.wav', 'XXX.wav']` using model `'../models/base.h5'` is called using:
 
 ```bash
 predict_sounds(files = ['XXX.wav', 'XXX.wav'], model = '../models/base.h5')
