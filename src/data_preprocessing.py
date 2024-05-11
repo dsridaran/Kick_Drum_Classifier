@@ -11,7 +11,7 @@ from collections import Counter
 import cv2
 import random
 
-def prepare_data(drum_path, kick_path, x_percent = 1.0, type = "center", noise_factor = 0.0, verbose = False):
+def prepare_data(drum_path, kick_path, x_percent = 1.0, type = "center", verbose = False):
     """
     Preprocess sound data with augmentations (if required).
 
@@ -19,8 +19,7 @@ def prepare_data(drum_path, kick_path, x_percent = 1.0, type = "center", noise_f
     drum_path (str): File path to drum audio samples.
     kick_path (str): File path to kick audio samples.
     x_percent (float): Percentage of 0.4 second audio to train model.
-    type (string): Section of sound audio to retain ("start", "center", "end", or "random")
-    noise_factor (float): Articifical noise factor to add to raw audio.
+    type (string): Section of sound audio to retain ("start", "center", or "end")
     verbose (bool): Outputs printed if True.
    
     Returns:
@@ -31,8 +30,8 @@ def prepare_data(drum_path, kick_path, x_percent = 1.0, type = "center", noise_f
     """
 
     # Load kick and drum samples (with augmentations)
-    drum_samples, drum_files = load_files(folder = drum_path, x_percent = x_percent, type = type, noise_factor = noise_factor)
-    kick_samples, kick_files = load_files(folder = kick_path, x_percent = x_percent, type = type, noise_factor = noise_factor)
+    drum_samples, drum_files = load_files(folder = drum_path, x_percent = x_percent, type = type)
+    kick_samples, kick_files = load_files(folder = kick_path, x_percent = x_percent, type = type)
     X = np.concatenate((drum_samples, kick_samples), axis = 0)
     X = X.reshape((*X.shape, 1))
     
@@ -51,7 +50,7 @@ def prepare_data(drum_path, kick_path, x_percent = 1.0, type = "center", noise_f
 
     return X, y, X_labs
 
-def load_files(folder = None, files = None, x_percent = 1.0, type = "center", noise_factor = 0.0):
+def load_files(folder = None, files = None, x_percent = 1.0, type = "center"):
     """
     Load sound files and apply augmentations.
 
@@ -60,7 +59,6 @@ def load_files(folder = None, files = None, x_percent = 1.0, type = "center", no
     files (list): Optional list of specific files to process.
     x_percent (float): Percentage of 0.4 second audio to train model.
     type (string): Section of sound audio to retain ("start", "center", "end", or "random")
-    noise_factor (float): Articifical noise factor to add to raw audio.
     
     Returns:
     tuple: Contains multiple elements:
@@ -81,7 +79,7 @@ def load_files(folder = None, files = None, x_percent = 1.0, type = "center", no
         audio, sr = librosa.load(file, sr = None)
         
         # Perform augmentations
-        augmented_audio = augment_wav(y = audio, x_percent = x_percent, type = type, noise_factor = noise_factor)
+        augmented_audio = augment_wav(y = audio, x_percent = x_percent, type = type)
         
         # Convert to MEL spectrogram representation
         mel_spec = librosa.feature.melspectrogram(y = augmented_audio, sr = sr)
@@ -89,15 +87,14 @@ def load_files(folder = None, files = None, x_percent = 1.0, type = "center", no
         arrays.append(mel_spec_db)
     return np.array(arrays), files
     
-def augment_wav(y, x_percent, type = "center", noise_factor = 0.0):
+def augment_wav(y, x_percent, type = "center"):
     """
     Augment wave with snipping and random noise.
 
     Parameters:
     y (array): Audio signal of sound.
     x_percent (float): Percentage of 0.4 second audio to train model.
-    type (string): Section of sound audio to retain ("start", "center", "end", or "random")
-    noise_factor (float): Articifical noise factor to add to raw audio.
+    type (string): Section of sound audio to retain ("start", "center", or "end")
     
     Returns:
     array: Augmented sound representation.
@@ -108,35 +105,14 @@ def augment_wav(y, x_percent, type = "center", noise_factor = 0.0):
 
     # Slice clip and add random noise
     if type == "start":
-        return add_noise(y[:x_samples], noise_factor)
+        return y[:x_samples]
     elif type == "end":
-        return add_noise(y[-x_samples:], noise_factor)
+        return y[-x_samples:]
     elif type == "center":
         mid_start = len(y) // 2 - x_samples // 2
-        return add_noise(y[mid_start:(mid_start + x_samples)], noise_factor)
-    elif type == "random":
-        random_start = np.random.randint(0, len(y) - x_samples)
-        return add_noise(y[random_start:(random_start + x_samples)], noise_factor)
+        return y[mid_start:(mid_start + x_samples)]
     else:
         return y
-
-def add_noise(data, noise_factor):
-    """
-    Add artificial noise to audio.
-
-    Parameters:
-    data (array): Sound representation.
-    noise_factor (float): Articifical noise factor to add to raw audio.
-    
-    Returns:
-    tuple: Contains multiple elements:
-        - Array of audio files (MEL spectrogram)
-        - Array of source file names
-    """
-    noise = np.random.randn(len(data))
-    augmented_data = data + (noise_factor * noise)
-    augmented_data = augmented_data.astype(type(data[0]))
-    return augmented_data
     
 def split_data(X, y, X_labs, X_train_labs = None, test_size = 0.25, random_state = 1, verbose = False):
     """
