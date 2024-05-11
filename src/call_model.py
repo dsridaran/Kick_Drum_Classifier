@@ -2,6 +2,7 @@ import tensorflow as tf
 import librosa
 import os
 import numpy as np
+from data_preprocessing import augment_wav
 
 def predict_sounds(files, model = 'models/base.h5'):
     """
@@ -14,7 +15,7 @@ def predict_sounds(files, model = 'models/base.h5'):
     Returns:
     list: List with files, predicted classes, and confidence.
     """
-
+    
     # Pre-process audio files
     samples, names = load_files(file = files)
     samples = samples.reshape((*samples.shape, 1))
@@ -36,18 +37,32 @@ def predict_sounds(files, model = 'models/base.h5'):
     
     return result
 
-def load_files(file = None):
+def load_files(file = None, x_percent = 1.0, type = "center"):
+    """
+    Preprocess data for model inference
+
+    Parameters:
+    files (list): List of audio files on which to run inference.
+    x_percent (float): Percentage of 0.4 second audio to train model.
+    type (string): Section of sound audio to retain ("start", "center", or "end").
+    
+    Returns:
+    list: List with files, predicted classes, and confidence.
+    """
+    
     arrays = []
     if isinstance(file, list):
         for f in file:
             audio, sr = librosa.load(f, sr = None)
-            mel_spec = librosa.feature.melspectrogram(y = audio, sr = sr)
+            augmented_audio = augment_wav(y = audio, x_percent = x_percent, type = type)
+            mel_spec = librosa.feature.melspectrogram(y = augmented_audio, sr = sr)
             mel_spec_db = librosa.power_to_db(mel_spec, ref = np.max)
             arrays.append(mel_spec_db)
         return np.array(arrays), file
     else:
         audio, sr = librosa.load(file, sr = None)
-        mel_spec = librosa.feature.melspectrogram(y = audio, sr = sr)
+        augmented_audio = augment_wav(y = audio, x_percent = x_percent, type = type)
+        mel_spec = librosa.feature.melspectrogram(y = augmented_audio, sr = sr)
         mel_spec_db = librosa.power_to_db(mel_spec, ref = np.max)
         arrays.append(mel_spec_db)
         return np.array(arrays), [file]
