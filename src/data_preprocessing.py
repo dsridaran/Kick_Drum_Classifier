@@ -19,7 +19,7 @@ def prepare_data(drum_path, kick_path, x_percent = 1.0, type = "center", verbose
     drum_path (str): File path to drum audio samples.
     kick_path (str): File path to kick audio samples.
     x_percent (float): Percentage of 0.4 second audio to train model.
-    type (string): Section of sound audio to retain ("start", "center", or "end")
+    type (string): Section of sound audio to retain ("start", "center", or "end").
     verbose (bool): Outputs printed if True.
    
     Returns:
@@ -58,7 +58,7 @@ def load_files(folder = None, files = None, x_percent = 1.0, type = "center"):
     folder (str): File path to audio samples.
     files (list): Optional list of specific files to process.
     x_percent (float): Percentage of 0.4 second audio to train model.
-    type (string): Section of sound audio to retain ("start", "center", "end", or "random")
+    type (string): Section of sound audio to retain ("start", "center", "end", or "random").
     
     Returns:
     tuple: Contains multiple elements:
@@ -94,7 +94,7 @@ def augment_wav(y, x_percent, type = "center"):
     Parameters:
     y (array): Audio signal of sound.
     x_percent (float): Percentage of 0.4 second audio to train model.
-    type (string): Section of sound audio to retain ("start", "center", or "end")
+    type (string): Section of sound audio to retain ("start", "center", or "end").
     
     Returns:
     array: Augmented sound representation.
