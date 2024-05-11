@@ -39,6 +39,12 @@ train_classifier(model_name = "base", X_train_labs = ['XXX.wav', 'XXX.wav'])
 
 Models are saved by default, but this behavior can be turned off using `model_save = False`.
 
+To understand the models, GradCAMs can be plotted using code from `src\plot_models.py`:
+
+```bash
+plot_grad_cam(X_test, y_test, n = 5, model = model, last_conv_layer_name = 'final_layer')
+```
+
 ### Model Inference
 
 Run inference using the following Jupyter notebook:
