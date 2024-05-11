@@ -1,0 +1,108 @@
+import os
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import seaborn as sns
+import tensorflow as tf
+import cv2
+import librosa
+import soundfile as sf
+
+def plot_grad_cam(X_test, y_test, n, model, last_conv_layer_name = 'final_layer'):
+    """
+    Plot GradCAM for model example.
+
+    Parameters:
+    X_test (DataFrame): Input features for test observations.
+    y_test (array): True output labels for test observations.
+    n (int): Sample number for which to plot.
+    model (model): Trained neural network model.
+    last_conv_layer_name (str): Name of last convolutional neural network layer.
+    
+    Returns:
+    heatmap: GradCAM heatmap.
+    """
+    
+    # Identify if sample is kick or drum
+    input_array = y_test[n]
+    y_lab = "Drum" if input_array[0] > input_array[1] else "Kick"
+
+    # Extract sample image for processing
+    test_img = X_test[n]
+    test_img_processed = np.expand_dims(test_img, axis = 0)
+
+    # Normalize image, extract RGB channels, and convert to tensor
+    img = test_img[..., 0]
+    mel_spec_db_normalized = (img - np.min(img)) / (np.max(img) - np.min(img))
+    mel_spec_rgb = plt.get_cmap('inferno')(mel_spec_db_normalized)
+    mel_spec_rgb = mel_spec_rgb[..., :3]
+    mel_spec_rgb_tensor = tf.convert_to_tensor(mel_spec_rgb, dtype = tf.float32)
+
+    # Generate resized and normalized heatmap
+    heatmap = make_gradcam_heatmap(test_img_processed, model, last_conv_layer_name, 0)
+    heatmap_resized = cv2.resize(heatmap, (mel_spec_rgb_tensor.shape[1], mel_spec_rgb_tensor.shape[0]))
+    heatmap_normalized = np.uint8(255 * heatmap_resized)
+    heatmap_colored = cv2.applyColorMap(heatmap_normalized, cv2.COLORMAP_HOT)
+
+    # Create plots
+    plt.figure(figsize = (15, 10))
+
+    # 1. Original Mel spectrogram
+    plt.subplot(1, 3, 1)
+    plt.imshow(mel_spec_rgb_tensor)
+    plt.title(f'Original Mel Spectrogram: {y_lab}')
+    plt.axis('off')
+    plt.gca().invert_yaxis()
+
+    # 2. Heatmap
+    plt.subplot(1, 3, 2)
+    plt.imshow(heatmap_colored)
+    plt.title('Heatmap')
+    plt.axis('off')
+    plt.gca().invert_yaxis()
+
+    # 3. Superimposed image
+    superimposed_img = (heatmap_colored * 0.4) + mel_spec_rgb_tensor
+    plt.subplot(1, 3, 3)
+    plt.imshow(superimposed_img)
+    plt.title('Overlay Image')
+    plt.axis('off')
+    plt.gca().invert_yaxis()
+    plt.show()
+    return heatmap
+
+def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index = 0):
+    """
+    Create GradCAM heatmap.
+
+    Parameters:
+    img_array (array): Input image array.
+    model (model): Trained neural network model.
+    last_conv_layer_name (str): Name of last convolutional neural network layer.
+    pred_index (int): Index of predictions.
+    
+    Returns:
+    heatmap: GradCAM heatmap.
+    """
+
+    # Maps input image to activations of last conv layer and output predictions
+    grad_model = tf.keras.models.Model([model.inputs], [model.get_layer(last_conv_layer_name).output, model.output])
+
+    # Compute gradient of top predicted class for input image with respect to activations of last conv layer
+    with tf.GradientTape() as tape:
+        last_conv_layer_output, preds = grad_model(img_array)
+        if pred_index is None:
+            pred_index = tf.argmax(preds[0])
+        class_channel = preds[:, pred_index]
+
+    grads = tape.gradient(class_channel, last_conv_layer_output)
+    pooled_grads = tf.reduce_mean(grads, axis = (0, 1, 2))
+
+    # Multiply each channel in feature map array by importance with respect to top predicted class
+    last_conv_layer_output = last_conv_layer_output[0]
+    heatmap = last_conv_layer_output @ pooled_grads[..., tf.newaxis]
+    heatmap = tf.squeeze(heatmap)
+
+    # Normalize heatmap between 0 & 1
+    heatmap = tf.maximum(heatmap, 0) / tf.math.reduce_max(heatmap)
+    return heatmap.numpy()
