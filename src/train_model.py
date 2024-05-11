@@ -15,7 +15,7 @@ import cv2
 import random
 from data_preprocessing import prepare_data, split_data
 
-def train_classifier(model_name = "none", model_save = True, overwrite = False, drum_path = '../data/raw/drum', kick_path = '../data/raw/kick', X_train_labs = None, x_percent = 1.0, type = "center", noise_factor = 0.0, verbose = False, epochs = 3, batch_size = 32, validation_split = 0.2, seed = 1, plot_cm = False):
+def train_classifier(model_name = "none", model_save = True, overwrite = False, drum_path = '../data/raw/drum', kick_path = '../data/raw/kick', X_train_labs = None, x_percent = 1.0, type = "center", verbose = False, epochs = 3, batch_size = 32, validation_split = 0.2, seed = 1, plot_cm = False):
     """
     Train binary classification model.
 
@@ -28,7 +28,6 @@ def train_classifier(model_name = "none", model_save = True, overwrite = False, 
     X_train_labs (list): Optional list of matches over which to train model.
     x_percent (float): Percentage of 0.4 second audio to train model.
     type (string): Section of sound audio to retain ("start", "center", "end", or "random")
-    noise_factor (float): Articifical noise factor to add to raw audio.
     verbose (bool): Outputs printed if True.
     epochs (int): Number of epochs to train model.
     batch_size (int): Batch size to train model.
@@ -46,7 +45,7 @@ def train_classifier(model_name = "none", model_save = True, overwrite = False, 
          return 0, 0
         
     # Extract train and test data
-    X, y, X_labs = prepare_data(drum_path, kick_path, x_percent, type, noise_factor, verbose)
+    X, y, X_labs = prepare_data(drum_path, kick_path, x_percent, type, verbose)
     X_train, X_test, y_train, y_test = split_data(X, y, X_labs, X_train_labs = X_train_labs, verbose = verbose)
     
     # Set seed for reproducability
