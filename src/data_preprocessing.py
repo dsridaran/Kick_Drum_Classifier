@@ -8,7 +8,7 @@ from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.utils import to_categorical
 import soundfile as sf
 from collections import Counter
-import cv2
+#import cv2
 import random
 
 def prepare_data(drum_path, kick_path, x_percent = 1.0, type = "center", verbose = False):
