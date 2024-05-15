@@ -66,6 +66,8 @@ The expected inputs for each match are organized as follows:
 - **data/raw/drum/{file}.wav:** 0.4 second 48kHz audio data for drums.
 - **data/raw/kick/{file}.wav:** 0.4 second 48kHz audio data for kicks.
 
+The data was provided by Salsa Sound for research purposes only.
+
 ## Contact
 
 For questions or support on this code, please contact Dilan SriDaran (dilan.sridaran@gmail.com).
