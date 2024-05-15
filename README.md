@@ -71,5 +71,7 @@ The data was provided by Salsa Sound for research purposes only.
 ## Contact
 
 For questions or support on this code, please contact Dilan SriDaran (dilan.sridaran@gmail.com).
+
 For questions or requests to access the data, please contact Rob Oldfield (rob@salsasound.com).
+
 If you are interested in contributing further to this research, please contact Johsan Billingham (johsan.billingham@fifa.org).
