@@ -2,7 +2,7 @@ import os
 import numpy as np
 import re
 import librosa
-import librosa.display
+#import librosa.display
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.utils import to_categorical
